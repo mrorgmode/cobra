@@ -5,9 +5,11 @@ package net.cobra;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -42,7 +44,7 @@ public class Cobra {
 	private static final Logger log = LoggerFactory
 			.getLogger(Cobra.class);
 	Twitter twitter         = null;
-	String credentials_file = "c:\\temp\\testoauth.txt";
+	String credentials_file = "oauth.key";
 
 
 
@@ -70,7 +72,7 @@ public class Cobra {
 	private List<Status> getStatuses() {
 		List<Status> statuses = null;
 		long sinceId = 10;
-		
+
 		try {
 			//statuses = twitter.getHomeTimeline(new Paging(sinceId));
 			statuses = twitter.getHomeTimeline();
@@ -82,7 +84,7 @@ public class Cobra {
 		return statuses;
 	}
 
-	
+
 	protected List<Crime> parseStatuses(List<Status> statuses) {
 		List<Crime> crimes = new ArrayList<Crime>();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -148,95 +150,99 @@ public class Cobra {
 	}
 
 	private void do_auth(){
-
-		if(new File(credentials_file).isFile()) {
-			String consumer = null;
-			String consumer_key = null;
-			String token = null;
-			String tokenSecret = null;
-
-			BufferedReader br = null;
-
-			try {
-				br = new BufferedReader(new FileReader(credentials_file));
-
-				consumer = br.readLine();
-				consumer_key = br.readLine();
-				token = br.readLine();
-				tokenSecret = br.readLine();
-
-				twitter.setOAuthConsumer(consumer, consumer_key);
-
-				AccessToken accessToken = new AccessToken(token, tokenSecret);
-				twitter.setOAuthAccessToken(accessToken);
-				br.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		} else {
-			initial_auth();
-		}
-	}
-
-
-	private void initial_auth(){
-		RequestToken requestToken = null;
-		try {
-			requestToken = twitter.getOAuthRequestToken();
-		} catch (TwitterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		AccessToken accessToken = null;
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		String consumer = null;
 		String consumer_key = null;
+		String token = null;
+		String tokenSecret = null;
+
+		BufferedReader br = null;
 
 		try {
-			System.out.println("Enter API key (get from dev.twitter.com):");
+
+			InputStream inputStream = Cobra.class.getResourceAsStream(credentials_file);
+
+			// Dev mode
+			if(inputStream == null) {
+				inputStream = new FileInputStream("src"+File.separator+"main"+File.separator+"resources" +File.separator +credentials_file);
+			}
+			
+			InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+			br = new BufferedReader(inputStreamReader);
+
 			consumer = br.readLine();
-			System.out.println("Enter API secret key (get from dev.twitter.com):");
 			consumer_key = br.readLine();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			token = br.readLine();
+			tokenSecret = br.readLine();
 
-		while (null == accessToken) {
-			System.out.println("Open the following URL and grant access to your account:");
-			System.out.println(requestToken.getAuthorizationURL());
-			System.out.print("Enter the PIN(if aviailable) or just hit enter.[PIN]:");
-			String pin = null;
-			try {
-				pin = br.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try{
-				if(pin.length() > 0){
-					accessToken = twitter.getOAuthAccessToken(requestToken, pin);
-				}else{
-					accessToken = twitter.getOAuthAccessToken();
-				}
-			} catch (TwitterException te) {
-				if(401 == te.getStatusCode()){
-					System.out.println("Unable to get the access token.");
-				}else{
-					te.printStackTrace();
-				}
-			}
-		}
-		//persist to the accessToken for future reference.
-		try {
-			storeAccessToken(twitter.verifyCredentials().getId() , accessToken, consumer, consumer_key);
-		} catch (Exception e) {
+			twitter.setOAuthConsumer(consumer, consumer_key);
+
+			AccessToken accessToken = new AccessToken(token, tokenSecret);
+			twitter.setOAuthAccessToken(accessToken);
+			br.close();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
+
+
+	//	private void initial_auth(){
+	//		RequestToken requestToken = null;
+	//		try {
+	//			requestToken = twitter.getOAuthRequestToken();
+	//		} catch (TwitterException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}
+	//		AccessToken accessToken = null;
+	//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	//
+	//		String consumer = null;
+	//		String consumer_key = null;
+	//
+	//		try {
+	//			System.out.println("Enter API key (get from dev.twitter.com):");
+	//			consumer = br.readLine();
+	//			System.out.println("Enter API secret key (get from dev.twitter.com):");
+	//			consumer_key = br.readLine();
+	//		} catch (Exception e) {
+	//			e.printStackTrace();
+	//		}
+	//
+	//		while (null == accessToken) {
+	//			System.out.println("Open the following URL and grant access to your account:");
+	//			System.out.println(requestToken.getAuthorizationURL());
+	//			System.out.print("Enter the PIN(if aviailable) or just hit enter.[PIN]:");
+	//			String pin = null;
+	//			try {
+	//				pin = br.readLine();
+	//			} catch (IOException e) {
+	//				// TODO Auto-generated catch block
+	//				e.printStackTrace();
+	//			}
+	//			try{
+	//				if(pin.length() > 0){
+	//					accessToken = twitter.getOAuthAccessToken(requestToken, pin);
+	//				}else{
+	//					accessToken = twitter.getOAuthAccessToken();
+	//				}
+	//			} catch (TwitterException te) {
+	//				if(401 == te.getStatusCode()){
+	//					System.out.println("Unable to get the access token.");
+	//				}else{
+	//					te.printStackTrace();
+	//				}
+	//			}
+	//		}
+	//		//persist to the accessToken for future reference.
+	//		try {
+	//			storeAccessToken(twitter.verifyCredentials().getId() , accessToken, consumer, consumer_key);
+	//		} catch (Exception e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}
+	//	}
 
 	private void storeAccessToken(long useId, AccessToken accessToken, String consumer, String consumer_key){
 		PrintWriter out = null;
