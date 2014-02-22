@@ -32,6 +32,7 @@ $(document).ready(function () {
         script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&' +
             'callback=initialize';
         document.body.appendChild(script);
+        console.log("Loaded")
     }
 
     window.onload = loadScript; // Load map async
