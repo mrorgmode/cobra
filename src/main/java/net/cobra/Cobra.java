@@ -3,9 +3,6 @@
  */
 package net.cobra;
 
-import net.cobra.Regexp;
-import net.cobra.Crime;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,16 +19,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import twitter4j.Paging;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterFactory;
-import twitter4j.TwitterException;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
+import net.cobra.util.Regexp;
+import net.cobra.valueobjects.Crime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
 
 
 
@@ -61,6 +60,9 @@ public class Cobra {
 
 		List<Status> statuses = tg2.getStatuses();		
 		List<Crime> crimes = tg2.parseStatuses(statuses);
+		for(Crime crime : crimes) {
+			log.debug(crime.toString());
+		}
 	}
 
 
@@ -80,11 +82,11 @@ public class Cobra {
 		return statuses;
 	}
 
-
-	private List<Crime> parseStatuses(List<Status> statuses) {
+	
+	protected List<Crime> parseStatuses(List<Status> statuses) {
 		List<Crime> crimes = new ArrayList<Crime>();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String feedpat = "^([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]), ([A-ZÅÄÖ][^:]*), ([A-ZÅÄÖ][^:]*)[:] (.+?) (http.*+)$";
+		String feedpat = "^([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]), ([A-Z][^:]*), ([A-Z][^:]*)[:] (.+?) (http.*+)$";
 
 		for (Status status : statuses) {
 			List<String> matches = Regexp.match(status.getText(), feedpat);
