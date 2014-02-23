@@ -1,0 +1,60 @@
+{
+    "timestamp" : "12343438987",
+    "crimes" : [
+        {
+            "title": "Bilbrand på bostadsparkering",
+            "description" : "Mer info. Mer info. Mer info.",
+            "url" : "http://www.polisen.se/brott/article.php?id=1234",
+            "geolocation" : {
+                "latitude" : "18.069",
+                "longitude" : "59.3296"
+            },
+            "severity" : "5",
+            "kind" : "vandalism"
+        },
+        {
+            "title": "Inbrott i lägenhet",
+            "description" : "Mer info. Mer info. Mer info.",
+            "url" : "http://www.polisen.se/brott/article.php?id=1235",
+            "geolocation" : {
+                "latitude" : "18.049",
+                "longitude" : "59.3276"
+            },
+            "severity" : "5",
+            "kind" : "theft"
+        },
+        {
+            "title": "Villainbrott Solln, München",
+            "description" : "Mer info. Mer info. Mer info.",
+            "url" : "http://www.polisen.se/brott/article.php?id=1236",
+            "geolocation" : {
+                "latitude" : "48.08104560536441",
+                "longitude" : "11.513203051812477"
+            },
+            "severity" : "6",
+            "kind" : "theft"
+        },
+        {
+            "title": "Snatteri",
+            "description" : "Mer info. Mer info. Mer info.",
+            "url" : "http://www.polisen.se/brott/article.php?id=1238",
+            "geolocation" : {
+                "latitude" : "18.071",
+                "longitude" : "59.3299"
+            },
+            "severity" : "1",
+            "kind" : "theft"
+        },
+        {
+            "title": "Fortkörning",
+            "description" : "Mer info. Mer info. Mer info.",
+            "url" : "http://www.polisen.se/brott/article.php?id=1238",
+            "geolocation" : {
+                "latitude" : "18.077",
+                "longitude" : "59.3289"
+            },
+            "severity" : "4",
+            "kind" : "traffic"
+        }
+    ]
+}

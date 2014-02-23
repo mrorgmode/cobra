@@ -8,6 +8,9 @@ var conf = (function () {
 
 
     return {
+        dataRefreshInterval: 15*1000,
+
+        crimesUrl: 'http://localhost:9090/js/sampleCrimeRequestResponse.json',
 
         featureOpts: [
             {
