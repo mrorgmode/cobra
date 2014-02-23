@@ -1,18 +1,37 @@
 body {
     padding-top: 20px;
     padding-bottom: 20px;
+    background-color: darkred;
+
 }
 
-.google-maps {
-    position: relative;
-    padding-bottom: 50%;
-    height: 0;
-    overflow: hidden;
-}
 .google-maps iframe {
     position: absolute;
     top: 0;
     left: 0;
     width: 100% !important;
     height: 100% !important;
+}
+
+@media all and (orientation:portrait) {
+
+    .google-maps {
+        position: relative;
+        padding-bottom: 120%;
+        height: 0;
+        overflow: hidden;
+    }
+
+}
+
+
+@media all and (orientation:landscape) {
+
+    .google-maps {
+        position: relative;
+        padding-bottom: 50%;
+        height: 0;
+        overflow: hidden;
+    }
+
 }

@@ -18,9 +18,7 @@ var util = (function () {
             else
                 callback(defaultLocation);
 
-        },
-
-
+        }
 
     };
 
